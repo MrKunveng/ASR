@@ -1,0 +1,13 @@
+real-time-translator/
+├── main.py
+├── requirements.txt
+├── src/
+│   ├── __init__.py
+│   ├── translator/
+│   │   ├── __init__.py
+│   │   ├── core.py
+│   │   ├── utils.py
+│   │   └── config.py
+│   └── web/
+│       ├── __init__.py
+│       └── app.py
