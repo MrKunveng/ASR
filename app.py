@@ -2,10 +2,10 @@ import streamlit as st
 from pathlib import Path
 import time
 import threading
-from ..translator.core import Translator
-from ..translator.utils import get_audio_html, validate_language
-from ..translator.config import SUPPORTED_LANGUAGES, UI_SETTINGS
 import pygame
+from src.translator.core import Translator
+from src.translator.utils import get_audio_html, validate_language
+from src.translator.config import SUPPORTED_LANGUAGES, UI_SETTINGS
 
 def initialize_session_state():
     """Initialize session state variables"""
