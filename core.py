@@ -8,6 +8,8 @@ import tempfile
 import time
 from .utils import cleanup_old_files
 from .config import SUPPORTED_LANGUAGES, SPEECH_SETTINGS
+import pygame
+pygame.mixer.init()
 
 class Translator:
     """Core translator class handling speech recognition and translation"""
@@ -25,6 +27,10 @@ class Translator:
         self.is_listening = False
         self.temp_dir = Path(tempfile.mkdtemp())
         self.translation_cache = {}
+        
+        # Initialize pygame mixer
+        if not pygame.mixer.get_init():
+            pygame.mixer.init()
         
     def _setup_recognizer(self):
         """Configure speech recognizer with optimal settings"""
@@ -101,6 +107,16 @@ class Translator:
             audio_path = self.temp_dir / f"audio_{time.time()}.mp3"
             tts = gTTS(text=text, lang=self.target_lang)
             tts.save(str(audio_path))
+            
+            # Play audio using pygame
+            try:
+                pygame.mixer.music.load(str(audio_path))
+                pygame.mixer.music.play()
+                while pygame.mixer.music.get_busy():
+                    pygame.time.Clock().tick(10)
+            except Exception as e:
+                print(f"Audio playback error: {e}")
+            
             return audio_path
         except Exception as e:
             print(f"Audio generation error: {e}")
