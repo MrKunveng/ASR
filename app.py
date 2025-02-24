@@ -5,6 +5,7 @@ import threading
 from ..translator.core import Translator
 from ..translator.utils import get_audio_html, validate_language
 from ..translator.config import SUPPORTED_LANGUAGES, UI_SETTINGS
+import pygame
 
 def initialize_session_state():
     """Initialize session state variables"""
@@ -55,6 +56,10 @@ def setup_ui():
 
 def main():
     """Main application function"""
+    # Initialize pygame mixer
+    if not pygame.mixer.get_init():
+        pygame.mixer.init()
+    
     initialize_session_state()
     setup_ui()
     
@@ -130,16 +135,14 @@ def process_audio_queue(output_container):
                 ```
             """)
             
-            # Generate audio in background
-            threading.Thread(
-                target=lambda: st.session_state.translator.generate_audio(result['translation']),
-                daemon=True
-            ).start()
+            # Generate and play audio
+            audio_path = st.session_state.translator.generate_audio(result['translation'])
             
             # Update history
             st.session_state.translation_history.append({
                 **result,
-                'timestamp': time.strftime('%H:%M:%S')
+                'timestamp': time.strftime('%H:%M:%S'),
+                'audio_path': audio_path
             })
             
             # Limit history size
