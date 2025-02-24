@@ -6,6 +6,7 @@ WORKDIR /app
 RUN apt-get update && apt-get install -y \
     portaudio19-dev \
     python3-pyaudio \
+    libsdl2-mixer-2.0-0 \
     && rm -rf /var/lib/apt/lists/*
 
 # Copy requirements and install Python dependencies
@@ -17,6 +18,7 @@ COPY src/ ./src/
 
 # Set environment variables
 ENV PYTHONPATH=/app
+ENV SDL_AUDIODRIVER=dummy
 
 # Expose Streamlit port
 EXPOSE 8501
